@@ -236,7 +236,8 @@ export default function DetailPage() {
                   width: '200px',
                   height: '200px',
                   borderRadius: '8px',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
+                  background: 'var(--color-bg-card)',
                   border: '2px solid var(--color-bg-card)',
                 }}
                 onError={(e) => {

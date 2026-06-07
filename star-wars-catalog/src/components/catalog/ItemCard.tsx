@@ -30,7 +30,8 @@ const imgStyle: React.CSSProperties = {
   width: '64px',
   height: '64px',
   borderRadius: '4px',
-  objectFit: 'cover',
+  objectFit: 'contain',
+  background: 'var(--color-bg-card)',
   flexShrink: 0,
 };
 
