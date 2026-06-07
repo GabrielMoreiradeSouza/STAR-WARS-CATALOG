@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSwapiDetail } from '../hooks/useSwapiList';
 import { useCharacterImages } from '../hooks/useCharacterImages';
 import { Header } from '../components/layout/Header';
@@ -139,12 +139,35 @@ const DETAIL_CONFIGS: Record<string, CategoryDetailConfig> = {
   },
 };
 
-const backLinkStyle: React.CSSProperties = {
+const backBtnStyle: React.CSSProperties = {
   display: 'inline-block',
   marginBottom: '24px',
   fontFamily: 'var(--font-body)',
   fontSize: '14px',
+  background: 'none',
+  border: 'none',
+  color: 'var(--color-accent)',
+  cursor: 'pointer',
+  padding: '0',
 };
+
+function BackButton() {
+  const navigate = useNavigate();
+  return (
+    <button
+      style={backBtnStyle}
+      onClick={() => {
+        if (window.history.length > 1) {
+          navigate(-1);
+        } else {
+          navigate('/');
+        }
+      }}
+    >
+      &larr; Back
+    </button>
+  );
+}
 
 const openingCrawlStyle: React.CSSProperties = {
   fontFamily: 'var(--font-body)',
@@ -176,7 +199,7 @@ export default function DetailPage() {
         <main className="main">
           <div className="container">
             <ErrorMessage message={`Unknown category: ${category}`} />
-            <Link to="/" style={backLinkStyle}>Back to Home</Link>
+            <BackButton />
           </div>
         </main>
         <Footer />
@@ -208,7 +231,7 @@ export default function DetailPage() {
               message={error?.message || 'Failed to load item'}
               onRetry={refetch}
             />
-            <Link to="/" style={backLinkStyle}>Back to Catalog</Link>
+            <BackButton />
           </div>
         </main>
         <Footer />
@@ -223,9 +246,7 @@ export default function DetailPage() {
       <Header />
       <main className="main">
         <div className="container">
-          <Link to="/" style={backLinkStyle}>
-            &larr; Back to Catalog
-          </Link>
+          <BackButton />
 
           {category === 'people' && imageMap && (
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>

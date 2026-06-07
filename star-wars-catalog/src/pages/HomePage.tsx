@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { useSwapiList } from '../hooks/useSwapiList';
@@ -89,9 +89,22 @@ const tagStyle: React.CSSProperties = {
 export default function HomePage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') as SwapiCategory | null;
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(() => {
+    const saved = sessionStorage.getItem('homePage_page');
+    return saved ? Number(saved) : 1;
+  });
 
   const { data: imageMap } = useCharacterImages();
+
+  const pageRef = useRef(page);
+  useEffect(() => { pageRef.current = page; }, [page]);
+
+  useEffect(() => {
+    return () => {
+      sessionStorage.setItem('homePage_page', String(pageRef.current));
+      sessionStorage.setItem('homePage_scrollY', String(window.scrollY));
+    };
+  }, []);
 
   const validCategory = categoryParam && CATEGORIES.some((c) => c.slug === categoryParam)
     ? categoryParam
@@ -117,6 +130,18 @@ export default function HomePage() {
   const isLoading = validCategory ? singleCategory.isLoading : allCategories.isLoading;
   const error = validCategory ? singleCategory.error : allCategories.error;
   const refetch = validCategory ? singleCategory.refetch : allCategories.refetch;
+
+  const restored = useRef(false);
+  useEffect(() => {
+    if (!restored.current && !isLoading) {
+      const savedScrollY = sessionStorage.getItem('homePage_scrollY');
+      if (savedScrollY) {
+        requestAnimationFrame(() => window.scrollTo(0, Number(savedScrollY)));
+        sessionStorage.removeItem('homePage_scrollY');
+      }
+      restored.current = true;
+    }
+  }, [isLoading]);
 
   const allItems = useMemo(() => {
     if (validCategory) return singleCategory.data?.results || [];
