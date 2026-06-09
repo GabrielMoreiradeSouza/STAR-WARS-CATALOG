@@ -1,3 +1,5 @@
+import { useMediaQuery } from '../../hooks/useMediaQuery';
+
 interface CategoryCardProps {
   name: string;
   slug: string;
@@ -18,6 +20,11 @@ const cardStyle: React.CSSProperties = {
   transition: 'border-color 0.2s ease, transform 0.2s ease',
 };
 
+const cardStyleMobile: React.CSSProperties = {
+  ...cardStyle,
+  padding: '24px 16px',
+};
+
 const accentStyle: React.CSSProperties = {
   width: '40px',
   height: '3px',
@@ -27,6 +34,7 @@ const accentStyle: React.CSSProperties = {
 };
 
 export function CategoryCard({ name, slug, itemCount, onClick }: CategoryCardProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const handleClick = () => onClick?.(slug);
 
   const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -45,7 +53,7 @@ export function CategoryCard({ name, slug, itemCount, onClick }: CategoryCardPro
       tabIndex={0}
       onClick={handleClick}
       onKeyDown={(e) => { if (e.key === 'Enter') handleClick(); }}
-      style={cardStyle}
+      style={isMobile ? cardStyleMobile : cardStyle}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

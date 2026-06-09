@@ -127,10 +127,22 @@ input:focus, select:focus {
   .container {
     padding: 0 var(--spacing-sm);
   }
+
+  .main {
+    padding: var(--spacing-lg) 0;
+  }
+
+  .grid-responsive { grid-template-columns: 1fr; }
 }
 
 @media (min-width: 769px) and (max-width: 1024px) {
   .container {
     padding: 0 var(--spacing-lg);
   }
+
+  .grid-responsive { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 1025px) {
+  .grid-responsive { grid-template-columns: repeat(3, 1fr); }
 }

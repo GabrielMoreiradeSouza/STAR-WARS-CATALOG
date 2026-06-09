@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface ItemCardProps {
   name: string;
@@ -16,6 +17,13 @@ const cardStyle: React.CSSProperties = {
   borderRadius: '4px',
   textDecoration: 'none',
   transition: 'border-color 0.2s ease',
+};
+
+const cardStyleMobile: React.CSSProperties = {
+  ...cardStyle,
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
 };
 
 const nameStyle: React.CSSProperties = {
@@ -46,6 +54,7 @@ const placeholderStyle: React.CSSProperties = {
 };
 
 export function ItemCard({ name, url, fields, imageUrl }: ItemCardProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const parts = url.replace(/\/$/, '').split('/');
   const id = parts[parts.length - 1];
   const category = parts[parts.length - 2];
@@ -53,7 +62,7 @@ export function ItemCard({ name, url, fields, imageUrl }: ItemCardProps) {
   return (
     <Link
       to={`/${category}/${id}`}
-      style={cardStyle}
+      style={isMobile ? cardStyleMobile : cardStyle}
       onMouseEnter={(e) => {
         e.currentTarget.style.borderColor = 'var(--color-accent)';
       }}

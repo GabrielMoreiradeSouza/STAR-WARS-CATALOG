@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSwapiDetail } from '../hooks/useSwapiList';
 import { useCharacterImages } from '../hooks/useCharacterImages';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { DetailField } from '../components/detail/DetailField';
@@ -186,6 +187,7 @@ export default function DetailPage() {
   const { category, id } = useParams<{ category: string; id: string }>();
   const config = category ? DETAIL_CONFIGS[category] : null;
   const { data: imageMap } = useCharacterImages();
+  const isMobile = useMediaQuery('(max-width: 768px)');
 
   const { data: item, isLoading, error, refetch } = useSwapiDetail<ResourceRaw>(
     (category as any) || 'people',
@@ -254,8 +256,8 @@ export default function DetailPage() {
                 src={imageMap[(item as any).name?.toLowerCase()]}
                 alt={(item as any).name}
                 style={{
-                  width: '200px',
-                  height: '200px',
+                  width: isMobile ? '120px' : '200px',
+                  height: isMobile ? '120px' : '200px',
                   borderRadius: '8px',
                   objectFit: 'contain',
                   background: 'var(--color-bg-card)',

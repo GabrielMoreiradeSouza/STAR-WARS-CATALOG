@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 interface SearchBarProps {
   value: string;
@@ -7,6 +8,7 @@ interface SearchBarProps {
 }
 
 export function SearchBar({ value, onChange, placeholder = 'Search by name...' }: SearchBarProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const [local, setLocal] = useState(value);
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export function SearchBar({ value, onChange, placeholder = 'Search by name...' }
       value={local}
       onChange={(e) => setLocal(e.target.value)}
       placeholder={placeholder}
-      style={{ width: '100%', maxWidth: '400px' }}
+      style={{ width: '100%', maxWidth: isMobile ? '100%' : '400px' }}
     />
   );
 }

@@ -10,7 +10,6 @@ interface ItemListProps {
 
 const gridStyle: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(3, 1fr)',
   gap: '16px',
 };
 
@@ -24,7 +23,7 @@ const skeletonStyle: React.CSSProperties = {
 export function ItemList({ isLoading, error, onRetry, children }: ItemListProps) {
   if (isLoading) {
     return (
-      <div style={gridStyle}>
+      <div className="grid-responsive" style={gridStyle}>
         {Array.from({ length: 6 }).map((_, i) => (
           <div key={i} style={skeletonStyle} />
         ))}
@@ -36,5 +35,5 @@ export function ItemList({ isLoading, error, onRetry, children }: ItemListProps)
     return <ErrorMessage message={error.message || 'Failed to load data'} onRetry={onRetry} />;
   }
 
-  return <div style={gridStyle}>{children}</div>;
+  return <div className="grid-responsive" style={gridStyle}>{children}</div>;
 }

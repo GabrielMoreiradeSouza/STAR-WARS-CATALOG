@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 import { CATEGORY_FILTERS, buildFilterOptions, type FilterValues } from '../../utils/filters';
 
 interface FilterPanelProps {
@@ -13,6 +14,11 @@ const containerStyle: React.CSSProperties = {
   gap: '12px',
   flexWrap: 'wrap',
   marginTop: '12px',
+};
+
+const containerStyleMobile: React.CSSProperties = {
+  ...containerStyle,
+  flexDirection: 'column',
 };
 
 const labelStyle: React.CSSProperties = {
@@ -30,14 +36,21 @@ const selectStyle: React.CSSProperties = {
   minWidth: '140px',
 };
 
+const selectStyleMobile: React.CSSProperties = {
+  ...selectStyle,
+  width: '100%',
+  minWidth: 0,
+};
+
 export function FilterPanel({ category, items, filters, onChange }: FilterPanelProps) {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const defs = CATEGORY_FILTERS[category] || [];
   const options = useMemo(() => buildFilterOptions(items, category), [items, category]);
 
   if (defs.length === 0) return null;
 
   return (
-    <div style={containerStyle}>
+    <div style={isMobile ? containerStyleMobile : containerStyle}>
       {defs.map((def) => {
         if (def.type !== 'select') return null;
 
@@ -47,7 +60,7 @@ export function FilterPanel({ category, items, filters, onChange }: FilterPanelP
           <div key={def.key}>
             <span style={labelStyle}>{def.label}</span>
             <select
-              style={selectStyle}
+              style={isMobile ? selectStyleMobile : selectStyle}
               value={filters[def.key] || ''}
               onChange={(e) => onChange(def.key, e.target.value)}
             >

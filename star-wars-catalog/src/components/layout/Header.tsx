@@ -1,9 +1,15 @@
 import { Link } from 'react-router-dom';
+import { useMediaQuery } from '../../hooks/useMediaQuery';
 
 const headerStyle: React.CSSProperties = {
   background: 'var(--color-bg-elevated)',
   borderBottom: '1px solid var(--color-bg-card)',
   padding: '16px 24px',
+};
+
+const headerStyleMobile: React.CSSProperties = {
+  ...headerStyle,
+  padding: '12px 16px',
 };
 
 const innerStyle: React.CSSProperties = {
@@ -22,11 +28,18 @@ const titleStyle: React.CSSProperties = {
   textDecoration: 'none',
 };
 
+const titleStyleMobile: React.CSSProperties = {
+  ...titleStyle,
+  fontSize: '22px',
+};
+
 export function Header() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
+
   return (
-    <header style={headerStyle}>
+    <header style={isMobile ? headerStyleMobile : headerStyle}>
       <div style={innerStyle}>
-        <Link to="/" style={titleStyle}>
+        <Link to="/" style={isMobile ? titleStyleMobile : titleStyle}>
           STAR WARS CATALOG
         </Link>
       </div>

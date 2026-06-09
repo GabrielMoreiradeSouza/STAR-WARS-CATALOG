@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useSwapiList } from '../hooks/useSwapiList';
 import { useCharacterImages } from '../hooks/useCharacterImages';
 import { useSearch } from '../hooks/useSearch';
+import { useMediaQuery } from '../hooks/useMediaQuery';
 import { Header } from '../components/layout/Header';
 import { Footer } from '../components/layout/Footer';
 import { ItemCard } from '../components/catalog/ItemCard';
@@ -70,8 +71,21 @@ const filterBtnBase: React.CSSProperties = {
   transition: 'all 0.2s ease',
 };
 
+const filterBtnBaseMobile: React.CSSProperties = {
+  ...filterBtnBase,
+  fontSize: '13px',
+  padding: '6px 14px',
+};
+
 const filterBtnActive: React.CSSProperties = {
   ...filterBtnBase,
+  background: 'var(--color-accent)',
+  color: '#0a0a0a',
+  borderColor: 'var(--color-accent)',
+};
+
+const filterBtnActiveMobile: React.CSSProperties = {
+  ...filterBtnBaseMobile,
   background: 'var(--color-accent)',
   color: '#0a0a0a',
   borderColor: 'var(--color-accent)',
@@ -87,6 +101,7 @@ const tagStyle: React.CSSProperties = {
 };
 
 export default function HomePage() {
+  const isMobile = useMediaQuery('(max-width: 768px)');
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryParam = searchParams.get('category') as SwapiCategory | null;
   const [page, setPage] = useState(() => {
@@ -219,7 +234,11 @@ export default function HomePage() {
             {CATEGORIES.map((cat) => (
               <button
                 key={cat.slug}
-                style={cat.slug === validCategory ? filterBtnActive : filterBtnBase}
+                style={
+                  isMobile
+                    ? (cat.slug === validCategory ? filterBtnActiveMobile : filterBtnBaseMobile)
+                    : (cat.slug === validCategory ? filterBtnActive : filterBtnBase)
+                }
                 onClick={() => selectCategory(cat.slug)}
                 onMouseEnter={(e) => {
                   if (cat.slug !== validCategory) {
@@ -238,7 +257,7 @@ export default function HomePage() {
           </div>
 
           <div style={{ marginBottom: '24px' }}>
-            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'center' }}>
               <SearchBar value={query} onChange={setQuery} />
               <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'var(--color-text-muted)' }}>
                 {(query || hasFilters) ? filteredItems.length : totalCount} items
